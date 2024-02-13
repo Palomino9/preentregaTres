@@ -27,7 +27,7 @@
         let tipoTarjeta = ingresoTarjeta(); // Se obtiene el tipo de tarjeta desde la función anterior.
         //bucle
         while (true) {
-            let cantidad = parseInt(Number(prompt("Ingresa la cantidad con la que te gustaría reservar"))); //Agrego un parseInt para redondear mis decimales en el resultado.
+            let cantidad = parseInt(Number(prompt("Ingresa la cantidad con la que te gustaría reservar")));
     
             // Realiza la verificación del tipo de tarjeta y muestra el resultado
             if (tipoTarjeta === "visa" || tipoTarjeta === "mastercard") {
@@ -92,6 +92,44 @@ function mostrarResumen(nombreUsuario, tipoEvento, paqueteSeleccionado, mesEvent
     alert("Resumen:\nNombre: " + nombreUsuario + "\nEvento: " + tipoEvento + "\nPaquete: " + paqueteSeleccionado + "\nMes del evento: " + mesEvento);
 }
 
+
+//EJERCICIO PRE ENTREGA 3
+
+// Función para mostrar el mensaje de agradecimiento y el resumen del usuario en el HTML
+function mostrarAgradecimiento(nombreUsuario, tipoEvento, paqueteSeleccionado, mesEvento) {
+    // Uso de DOM para mostrar el mensaje de agradecimiento y el resumen del usuario
+    document.getElementById("nombreUsuario").innerText = nombreUsuario;
+    document.getElementById("tipoEvento").innerText = tipoEvento;
+    document.getElementById("paqueteSeleccionado").innerText = paqueteSeleccionado;
+    document.getElementById("mesEvento").innerText = mesEvento;
+    document.getElementById("resumenUsuario").style.display = "block";
+
+    //  Datos del usuario en formato JSON para almacenamiento de información
+    let datosUsuario = {
+        nombre: nombreUsuario,
+        evento: tipoEvento,
+        paquete: paqueteSeleccionado,
+        mes: mesEvento
+    };
+
+    // Convertimos JSON a string
+    let datosUsuarioString = JSON.stringify(datosUsuario);
+
+    // Almacenamiento de los datos del usuario en localStorage
+    localStorage.setItem("datosUsuario", datosUsuarioString);
+}
+
+// Activación del botón de enviar
+document.getElementById("btnEnviar").addEventListener("click", enviarSeleccion);
+
+// Función para manejar el evento de clic en el botón "Enviar"
+function enviarSeleccion() {
+    alert("Revisa tu correo electrónico.");
+
+    // Finalizar el proceso
+    return;
+}
+
 // Proceso principal
 function procesoSeleccionEvento() {
     let nombreUsuario = solicitarNombreUsuario();
@@ -99,8 +137,7 @@ function procesoSeleccionEvento() {
     let tipoEvento = solicitarEventoInteres();
     let paqueteSeleccionado = mostrarPaquetesDisponibles(tipoEvento);
     let mesEvento = solicitarMesEvento();
-    mostrarResumen(nombreUsuario, tipoEvento, paqueteSeleccionado, mesEvento);
-    alert("En menos de 48 horas nos pondremos en contacto contigo. Muchas gracias")
+    mostrarAgradecimiento(nombreUsuario, tipoEvento, paqueteSeleccionado, mesEvento);
 }
 
 // Ejecutar el proceso principal
