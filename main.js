@@ -1,4 +1,4 @@
-// Definición de eventos
+// Definir tipo de eventos a nivel global
 let eventos = [
   { nombre: "Boda", paquetes: ["GOLD", "SILVER", "BRONZE"] },
   { nombre: "XV años", paquetes: ["GOLD", "SILVER", "BRONZE"] },
@@ -6,12 +6,12 @@ let eventos = [
   { nombre: "Sesión fotográfica", paquetes: ["GOLD", "SILVER", "BRONZE"] }
 ];
 
-// Saludo
+// Saludo inicial
 Swal.fire({
   title: '¡Hola!',
   text: 'Vamos a cotizar tu paquete',
-  icon: 'info',
-  confirmButtonText: 'Comenzar'
+  icon: 'success',
+  confirmButtonText: '¡Vamos!'
 }).then(() => {
   // Ingresar tipo de tarjeta
   ingresoTarjeta().then(() => {
@@ -49,7 +49,7 @@ function ingresoTarjeta() {
       title: 'Tipo de tarjeta',
       text: 'Ingresa el tipo de tarjeta con la que vas a pagar: VISA o MASTERCARD',
       input: 'text',
-      inputPlaceholder: 'Escribe aquí...',
+      inputPlaceholder: 'Mi tipo de tarjeta es...',
       showCancelButton: true,
       confirmButtonText: 'Enviar'
   }).then((result) => {
@@ -66,53 +66,61 @@ function ingresoTarjeta() {
 
 // Cotizar
 function cotizador() {
-  return Swal.fire({
-      title: 'Cotizador',
-      text: 'Ingresa la cantidad con la que te gustaría reservar:',
-      input: 'text',
-      inputPlaceholder: 'Escribe aquí...',
-      showCancelButton: true,
-      confirmButtonText: 'Enviar'
-  }).then((result) => {
-      if (result.isConfirmed) {
-          let cantidad = parseInt(result.value);
-          if (!isNaN(cantidad)) {
-              let comision = cantidad * 0.14;
-              return comision;
-          } else {
-              return cotizador();
-          }
+    return Swal.fire({
+        title: 'Cotizador',
+        text: 'Ingresa la cantidad con la que te gustaría reservar:',
+        input: 'text',
+        inputPlaceholder: 'Reservaría con...',
+        showCancelButton: true,
+        confirmButtonText: 'Enviar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let cantidad = parseInt(result.value);
+            if (!isNaN(cantidad)) {
+                let comision = cantidad * 0.14;
+                return mostrarComision(comision); 
+            } else {
+                return cotizador();
+            }
+        }
+    });
+  }
+  
+  // Mostrar comisión
+  function mostrarComision(comision) {
+    return new Promise((resolve) => {
+      if (!isNaN(comision)) {
+        Swal.fire({
+            title: 'Comisión',
+            text: `Vas a pagar una comisión adicional de $${comision.toFixed(2)}`,
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        }).then(() => resolve(comision)); 
+      } else {
+        resolve(0); 
       }
-  });
-}
+    });
+  }
+  
+  
+  // Solicitar nombre del usuario
+  function solicitarNombreUsuario() {
+    return Swal.fire({
+        title: 'Nombre del usuario',
+        text: 'Ingresa tu nombre:',
+        input: 'text',
+        inputPlaceholder: 'Mi nombre es...',
+        showCancelButton: true,
+        confirmButtonText: 'Enviar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            return result.value;
+        }
+    });
+  }
+  
 
-// Mostrar comisión
-function mostrarComision() {
-  return cotizador().then((comision) => {
-      Swal.fire({
-          title: 'Comisión',
-          text: `Vas a pagar una comisión adicional de $${comision.toFixed(2)}`,
-          icon: 'info',
-          confirmButtonText: 'Ok'
-      });
-  });
-}
 
-// Solicitar el nombre del usuario
-function solicitarNombreUsuario() {
-  return Swal.fire({
-      title: 'Nombre del usuario',
-      text: 'Ingresa tu nombre:',
-      input: 'text',
-      inputPlaceholder: 'Escribe aquí...',
-      showCancelButton: true,
-      confirmButtonText: 'Enviar'
-  }).then((result) => {
-      if (result.isConfirmed) {
-          return result.value;
-      }
-  });
-}
 
 // Mostrar los tipos de eventos disponibles
 function mostrarTiposEventos() {
@@ -120,14 +128,10 @@ function mostrarTiposEventos() {
   return Swal.fire({
       title: 'Tipos de eventos disponibles:',
       text: 'Estos son los tipos de eventos que manejamos: ' + tiposEventos,
-      icon: 'info',
+      icon: 'success',
       confirmButtonText: 'Ok'
   });
 }
-
-
-
-
 
 // Solicitar al usuario el evento de su interés
 function solicitarEventoInteres() {
@@ -135,7 +139,7 @@ function solicitarEventoInteres() {
       title: 'Tipo de evento',
       text: '¿Qué evento es de tu interés?',
       input: 'text',
-      inputPlaceholder: 'Escribe aquí...',
+      inputPlaceholder: '¿Boda, XV años, Evento infantil, Sesión fotográfica?',
       showCancelButton: true,
       confirmButtonText: 'Enviar'
   }).then((result) => {
@@ -146,7 +150,7 @@ function solicitarEventoInteres() {
   });
 }
 
-// Función para mostrar los paquetes disponibles para un tipo de evento
+// Mostrar los paquetes disponibles para un tipo de evento
 function mostrarPaquetesDisponibles(tipoEvento) {
   tipoEvento = tipoEvento.toLowerCase();
   let eventoSeleccionado = eventos.find(evento => evento.nombre.toLowerCase() === tipoEvento);
@@ -184,7 +188,7 @@ function solicitarMesEvento() {
       title: 'Mes del evento',
       text: 'Ingresa el mes de tu evento:',
       input: 'text',
-      inputPlaceholder: 'Escribe aquí...',
+      inputPlaceholder: 'Mi evento será en el mes de...',
       showCancelButton: true,
       confirmButtonText: 'Enviar'
   }).then((result) => {
@@ -196,10 +200,20 @@ function solicitarMesEvento() {
 
 // Función para mostrar un resumen de la selección del usuario
 function mostrarResumen(nombreUsuario, tipoEvento, paqueteSeleccionado, mesEvento) {
-  Swal.fire({
-      title: 'Resumen',
-      html: `Nombre: ${nombreUsuario}<br>Evento: ${tipoEvento}<br>Paquete: ${paqueteSeleccionado}<br>Mes del evento: ${mesEvento}`,
-      icon: 'info',
-      confirmButtonText: 'Ok'
-  });
-}
+    Swal.fire({
+        title: '¿Son correctos los datos de tu evento?',
+        html: `Nombre: ${nombreUsuario}<br>Evento: ${tipoEvento}<br>Paquete: ${paqueteSeleccionado}<br>Mes del evento: ${mesEvento}`,
+        icon: 'info',
+        confirmButtonText: 'Mis datos son correctos'
+    }).then(() => {
+
+      // Mostrar el mensaje de agradecimiento
+      Swal.fire({
+        title: '¡Gracias!',
+        text: 'Nos pondremos en contacto en menos de 24 horas. Por favor revisa tu correo.',
+        icon: 'success',
+        confirmButtonText: '¡Gracias!'
+      });
+    });
+  }
+  

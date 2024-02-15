@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="@sweetalert2/theme-borderless/borderless.css">
     <title>Pre entrega 3</title>
 </head>
 
@@ -21,7 +22,7 @@
 
     <h3>PRE ENTREGA TRES <br>
        Se capturan los datos del prospecto, se adjunta un contenedor para la captura de datos del usuario usando el DOM. <br>
-    A diferencia de la entrega pasada, el mensaje de agradecimiento y el resumen de información se muestra en la página y no en un alert.</h3>
+        Por medio de la librería SweetAlert2 se colocan nuevos alerts / inputs para captura de datos.</h3>
     <p>Del mismo modo, se almacenan los datos que el usuario ingresa en el local storage.</p>
     </div>
     
@@ -33,15 +34,11 @@
         <p><strong>Mes del evento:</strong> <span id="mesEvento"></span></p>
         <p>¡Gracias por tu selección! Nos pondremos en contacto contigo en menos de 48 horas.</p>
     </div>
-</div>
 
-    <div id="boton">
-<h4>Si tus datos son correctos da clic en el siguiente botón:</h4>
-<button id="btnEnviar">¡Mis datos son correctos!</button>
-    </div>
 
     <!-- Script de librería de sweet alert y vínculo a archivo JS. -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="sweetalert2/dist/sweetalert2.min.js"></script>
     <script src="./main.js"></script>
 </body>
 </html>
