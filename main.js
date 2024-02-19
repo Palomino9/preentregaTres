@@ -206,14 +206,23 @@ function mostrarResumen(nombreUsuario, tipoEvento, paqueteSeleccionado, mesEvent
         icon: 'info',
         confirmButtonText: 'Mis datos son correctos'
     }).then(() => {
+        
+        // Guardar datos en localStorage
+        const evento = {
+            nombreUsuario: nombreUsuario,
+            tipoEvento: tipoEvento,
+            paqueteSeleccionado: paqueteSeleccionado,
+            mesEvento: mesEvento
+        };
+        guardarEnLocalStorage('evento', JSON.stringify(evento));
 
-      // Mostrar el mensaje de agradecimiento
-      Swal.fire({
-        title: '¡Gracias!',
-        text: 'Nos pondremos en contacto en menos de 24 horas. Por favor revisa tu correo.',
-        icon: 'success',
-        confirmButtonText: '¡Gracias!'
-      });
+        // Mostrar el mensaje de agradecimiento
+        Swal.fire({
+            title: '¡Gracias!',
+            text: 'Nos pondremos en contacto en menos de 24 horas. Por favor revisa tu correo.',
+            icon: 'success',
+            confirmButtonText: '¡Gracias!'
+        });
     });
-  }
+}
   
