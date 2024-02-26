@@ -198,7 +198,15 @@ function solicitarMesEvento() {
   });
 }
 
-// Función para mostrar un resumen de la selección del usuario
+// Función para guardar en localStorage
+function guardarEnLocalStorage(clave, valor) {
+    let eventosGuardados = JSON.parse(localStorage.getItem(clave)) || [];
+    eventosGuardados.push(JSON.parse(valor)); // Convertir valor a objeto JSON antes de agregarlo
+    localStorage.setItem(clave, JSON.stringify(eventosGuardados));
+}
+
+  
+ // Función para mostrar un resumen de la selección del usuario
 function mostrarResumen(nombreUsuario, tipoEvento, paqueteSeleccionado, mesEvento) {
     Swal.fire({
         title: '¿Son correctos los datos de tu evento?',
@@ -225,4 +233,3 @@ function mostrarResumen(nombreUsuario, tipoEvento, paqueteSeleccionado, mesEvent
         });
     });
 }
-  
